@@ -5,6 +5,11 @@
 ║         Mobile-First | Gratis | Sin servidor propio       ║
 ╚══════════════════════════════════════════════════════════╝
 
+Hoja de Google Sheets requerida:
+  - Nombre de la hoja (pestaña): InventarioZimbawe
+  - Encabezados fila 1 (exactos, sin espacios extra):
+      id | nombre | categoria | cantidad | precio | fecha_actualizacion
+
 PARA CORRER LOCALMENTE:
   streamlit run app.py
 
@@ -34,184 +39,119 @@ st.set_page_config(
 # ══════════════════════════════════════════════════
 st.markdown("""
 <style>
-/* ---- Variables de color ---- */
 :root {
-    --rosa:     #E91E8C;
+    --rosa:       #E91E8C;
     --rosa-claro: #F8BBD9;
-    --dorado:   #C8973A;
-    --fondo:    #FFF9FC;
-    --texto:    #2D1B2E;
-    --gris:     #6B5672;
-    --verde:    #27AE60;
-    --rojo:     #E74C3C;
-    --radio:    14px;
+    --dorado:     #C8973A;
+    --fondo:      #FFF9FC;
+    --texto:      #2D1B2E;
+    --gris:       #6B5672;
+    --radio:      14px;
 }
-
-/* ---- Fondo general ---- */
 .stApp { background: var(--fondo); }
 .block-container { padding: 1rem 1rem 4rem; max-width: 700px; }
 
-/* ---- Header personalizado ---- */
 .brand-header {
     background: linear-gradient(135deg, #E91E8C 0%, #9C27B0 100%);
-    border-radius: var(--radio);
-    padding: 1.2rem 1.5rem;
-    text-align: center;
-    margin-bottom: 1.2rem;
+    border-radius: var(--radio); padding: 1.2rem 1.5rem;
+    text-align: center; margin-bottom: 1.2rem;
     box-shadow: 0 4px 20px rgba(233,30,140,0.3);
 }
-.brand-header h1 {
-    color: white;
-    font-size: 1.8rem;
-    margin: 0;
-    letter-spacing: 1px;
-}
-.brand-header p {
-    color: rgba(255,255,255,0.85);
-    margin: 0.2rem 0 0;
-    font-size: 0.9rem;
-}
+.brand-header h1 { color:white; font-size:1.8rem; margin:0; letter-spacing:1px; }
+.brand-header p  { color:rgba(255,255,255,0.85); margin:0.2rem 0 0; font-size:0.9rem; }
 
-/* ---- Tabs de navegación grandes ---- */
 .stTabs [data-baseweb="tab-list"] {
-    gap: 6px;
-    background: white;
-    border-radius: var(--radio);
-    padding: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    gap:6px; background:white; border-radius:var(--radio);
+    padding:6px; box-shadow:0 2px 8px rgba(0,0,0,0.08);
 }
 .stTabs [data-baseweb="tab"] {
-    border-radius: 10px !important;
-    padding: 0.6rem 1rem !important;
-    font-weight: 600 !important;
-    font-size: 0.95rem !important;
-    color: var(--gris) !important;
+    border-radius:10px !important; padding:0.6rem 1rem !important;
+    font-weight:600 !important; font-size:0.95rem !important; color:var(--gris) !important;
 }
 .stTabs [aria-selected="true"] {
-    background: linear-gradient(135deg, #E91E8C, #9C27B0) !important;
-    color: white !important;
+    background:linear-gradient(135deg,#E91E8C,#9C27B0) !important; color:white !important;
 }
 
-/* ---- Botones grandes (mobile-friendly) ---- */
 .stButton > button {
-    width: 100%;
-    min-height: 3rem;
-    font-size: 1rem;
-    font-weight: 700;
-    border-radius: var(--radio);
-    border: none;
-    background: linear-gradient(135deg, #E91E8C, #9C27B0);
-    color: white;
-    letter-spacing: 0.5px;
-    transition: all 0.2s;
-    box-shadow: 0 3px 12px rgba(233,30,140,0.35);
+    width:100%; min-height:3rem; font-size:1rem; font-weight:700;
+    border-radius:var(--radio); border:none;
+    background:linear-gradient(135deg,#E91E8C,#9C27B0);
+    color:white; transition:all 0.2s; box-shadow:0 3px 12px rgba(233,30,140,0.35);
 }
-.stButton > button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 5px 18px rgba(233,30,140,0.45);
+.stButton > button:hover { transform:translateY(-1px); box-shadow:0 5px 18px rgba(233,30,140,0.45); }
+
+.stTextInput input, .stNumberInput input {
+    font-size:1.05rem !important; padding:0.6rem 0.8rem !important;
+    border-radius:10px !important; border:2px solid #EDD9F0 !important;
 }
 
-/* ---- Botones secundarios ---- */
-[data-testid="baseButton-secondary"] > button {
-    background: white !important;
-    color: var(--rosa) !important;
-    border: 2px solid var(--rosa) !important;
-    box-shadow: none !important;
-}
-
-/* ---- Inputs grandes ---- */
-.stTextInput input, .stNumberInput input, .stSelectbox select {
-    font-size: 1.05rem !important;
-    padding: 0.6rem 0.8rem !important;
-    border-radius: 10px !important;
-    border: 2px solid #EDD9F0 !important;
-}
-.stTextInput input:focus, .stNumberInput input:focus {
-    border-color: var(--rosa) !important;
-}
-
-/* ---- Tarjetas de métricas ---- */
 .metric-card {
-    background: white;
-    border-radius: var(--radio);
-    padding: 1rem;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-    border-left: 4px solid var(--rosa);
+    background:white; border-radius:var(--radio); padding:1rem;
+    text-align:center; box-shadow:0 2px 10px rgba(0,0,0,0.07);
+    border-left:4px solid var(--rosa);
 }
-.metric-card .num { font-size: 2rem; font-weight: 800; color: var(--rosa); }
-.metric-card .label { font-size: 0.8rem; color: var(--gris); font-weight: 600; text-transform: uppercase; }
+.metric-card .num   { font-size:2rem; font-weight:800; color:var(--rosa); }
+.metric-card .label { font-size:0.8rem; color:var(--gris); font-weight:600; text-transform:uppercase; }
 
-/* ---- Badge de stock ---- */
-.stock-ok   { background:#d4edda; color:#155724; padding:3px 10px; border-radius:20px; font-weight:700; font-size:0.85rem; }
-.stock-low  { background:#fff3cd; color:#856404; padding:3px 10px; border-radius:20px; font-weight:700; font-size:0.85rem; }
-.stock-zero { background:#f8d7da; color:#721c24; padding:3px 10px; border-radius:20px; font-weight:700; font-size:0.85rem; }
-
-/* ---- Alertas personalizadas ---- */
 .alerta-ok  { background:#d1f2eb; color:#0a6b4c; border-radius:10px; padding:0.8rem 1rem; margin:0.5rem 0; font-weight:600; }
 .alerta-err { background:#f8d7da; color:#721c24; border-radius:10px; padding:0.8rem 1rem; margin:0.5rem 0; font-weight:600; }
-
-/* ---- Tabla responsive ---- */
-.stDataFrame { border-radius: var(--radio); overflow: hidden; }
-
-/* ---- Separadores ---- */
-.separador { border: none; border-top: 2px dashed #EDD9F0; margin: 1.2rem 0; }
+.stDataFrame { border-radius:var(--radio); overflow:hidden; }
 </style>
 """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════
-#  CONSTANTES
+#  CONSTANTES — nombres EXACTOS de tu Google Sheet
 # ══════════════════════════════════════════════════
-COLUMNAS = ["Producto", "Categoría", "Stock", "Precio (Bs)", "Última Actualización"]
+WORKSHEET    = "InventarioZimbawe"   # ← nombre de la pestaña
+
+COL_ID       = "id"
+COL_NOMBRE   = "nombre"
+COL_CAT      = "categoria"
+COL_CANTIDAD = "cantidad"
+COL_PRECIO   = "precio"
+COL_FECHA    = "fecha_actualizacion"
+
+COLUMNAS_SHEET = [COL_ID, COL_NOMBRE, COL_CAT, COL_CANTIDAD, COL_PRECIO, COL_FECHA]
+
 CATEGORIAS = [
     "💋 Labial", "🌸 Base/Corrector", "💅 Esmalte",
     "👁️ Sombra/Delineador", "🧴 Tinte/Coloración",
     "✨ Cuidado Facial", "🛁 Cuidado Corporal", "🌿 Cabello",
-    "💎 Perfumería", "🎨 Maquillaje Varios"
+    "💎 Perfumería", "🎨 Maquillaje Varios",
 ]
-STOCK_ALERTA = 5   # Unidades mínimas antes de alerta amarilla
+STOCK_ALERTA = 5
 
 # ══════════════════════════════════════════════════
 #  CONEXIÓN A GOOGLE SHEETS
 # ══════════════════════════════════════════════════
-@st.cache_resource(ttl=30)  # Refresca conexión cada 30 segundos
+@st.cache_resource(ttl=30)
 def get_connection():
-    """Retorna la conexión activa a Google Sheets."""
     return st.connection("gsheets", type=GSheetsConnection)
 
 
 def cargar_datos(conn) -> pd.DataFrame:
-    """Lee la hoja de cálculo y devuelve un DataFrame limpio."""
+    """Lee la hoja InventarioZimbawe y devuelve DataFrame limpio."""
     try:
         df = conn.read(
-            worksheet="Inventario",
-            usecols=list(range(len(COLUMNAS))),
-            ttl=10,  # segundos de caché para esta lectura
+            worksheet=WORKSHEET,
+            usecols=list(range(len(COLUMNAS_SHEET))),
+            ttl=10,
         )
-        # Limpiar filas completamente vacías
-        df = df.dropna(subset=["Producto"])
-        df = df[df["Producto"].astype(str).str.strip() != ""]
-
-        # Asegurar tipos correctos
-        df["Stock"] = pd.to_numeric(df["Stock"], errors="coerce").fillna(0).astype(int)
-        df["Precio (Bs)"] = pd.to_numeric(df["Precio (Bs)"], errors="coerce").fillna(0.0)
-
+        df = df.dropna(subset=[COL_NOMBRE])
+        df = df[df[COL_NOMBRE].astype(str).str.strip() != ""]
+        df[COL_ID]       = df[COL_ID].fillna("").astype(str)
+        df[COL_CANTIDAD] = pd.to_numeric(df[COL_CANTIDAD], errors="coerce").fillna(0).astype(int)
+        df[COL_PRECIO]   = pd.to_numeric(df[COL_PRECIO],   errors="coerce").fillna(0.0)
         return df.reset_index(drop=True)
-
     except Exception as e:
         st.error(f"⚠️ Error al leer Google Sheets: {e}")
-        # Retorna DataFrame vacío con estructura correcta si falla
-        return pd.DataFrame(columns=COLUMNAS)
+        return pd.DataFrame(columns=COLUMNAS_SHEET)
 
 
 def guardar_datos(conn, df: pd.DataFrame) -> bool:
-    """Escribe el DataFrame completo de vuelta a la hoja."""
+    """Escribe el DataFrame completo a la hoja."""
     try:
-        conn.update(
-            worksheet="Inventario",
-            data=df,
-        )
-        # Limpiar caché para forzar recarga
+        conn.update(worksheet=WORKSHEET, data=df)
         st.cache_resource.clear()
         return True
     except Exception as e:
@@ -219,8 +159,19 @@ def guardar_datos(conn, df: pd.DataFrame) -> bool:
         return False
 
 
+def generar_id(df: pd.DataFrame) -> str:
+    """Genera ID correlativo: ZB-001, ZB-002, ..."""
+    nums = []
+    for v in df[COL_ID].tolist():
+        try:
+            nums.append(int(str(v).replace("ZB-", "")))
+        except Exception:
+            pass
+    return f"ZB-{max(nums, default=0) + 1:03d}"
+
+
 # ══════════════════════════════════════════════════
-#  HEADER DE MARCA
+#  HEADER
 # ══════════════════════════════════════════════════
 st.markdown("""
 <div class="brand-header">
@@ -230,176 +181,125 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════
-#  CARGAR DATOS (una sola vez por sesión / rerun)
+#  CARGA INICIAL
 # ══════════════════════════════════════════════════
 conn = get_connection()
 df_inventario = cargar_datos(conn)
 
-# ══════════════════════════════════════════════════
-#  MÉTRICAS RÁPIDAS (siempre visibles arriba)
-# ══════════════════════════════════════════════════
 total_productos = len(df_inventario)
-sin_stock = int((df_inventario["Stock"] == 0).sum()) if total_productos > 0 else 0
-stock_bajo = int(((df_inventario["Stock"] > 0) & (df_inventario["Stock"] <= STOCK_ALERTA)).sum()) if total_productos > 0 else 0
+sin_stock  = int((df_inventario[COL_CANTIDAD] == 0).sum())               if total_productos > 0 else 0
+stock_bajo = int(((df_inventario[COL_CANTIDAD] > 0) &
+                  (df_inventario[COL_CANTIDAD] <= STOCK_ALERTA)).sum())  if total_productos > 0 else 0
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.markdown(f"""
-    <div class="metric-card">
-        <div class="num">{total_productos}</div>
-        <div class="label">Productos</div>
-    </div>""", unsafe_allow_html=True)
-with col2:
-    st.markdown(f"""
-    <div class="metric-card" style="border-color:#E67E22;">
-        <div class="num" style="color:#E67E22;">{stock_bajo}</div>
-        <div class="label">Stock Bajo</div>
-    </div>""", unsafe_allow_html=True)
-with col3:
-    st.markdown(f"""
-    <div class="metric-card" style="border-color:#E74C3C;">
-        <div class="num" style="color:#E74C3C;">{sin_stock}</div>
-        <div class="label">Sin Stock</div>
-    </div>""", unsafe_allow_html=True)
+# ── Métricas ──────────────────────────────────────
+c1, c2, c3 = st.columns(3)
+with c1:
+    st.markdown(f'<div class="metric-card"><div class="num">{total_productos}</div><div class="label">Productos</div></div>', unsafe_allow_html=True)
+with c2:
+    st.markdown(f'<div class="metric-card" style="border-color:#E67E22;"><div class="num" style="color:#E67E22;">{stock_bajo}</div><div class="label">Stock Bajo</div></div>', unsafe_allow_html=True)
+with c3:
+    st.markdown(f'<div class="metric-card" style="border-color:#E74C3C;"><div class="num" style="color:#E74C3C;">{sin_stock}</div><div class="label">Sin Stock</div></div>', unsafe_allow_html=True)
 
-st.markdown("<hr class='separador'>", unsafe_allow_html=True)
+st.markdown("<hr style='border:none;border-top:2px dashed #EDD9F0;margin:1.2rem 0;'>", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════
-#  NAVEGACIÓN POR TABS
+#  TABS
 # ══════════════════════════════════════════════════
-tab_consulta, tab_ingreso, tab_edicion = st.tabs([
-    "🔍 Consulta",
-    "➕ Ingreso",
-    "✏️ Editar Stock"
-])
+tab_consulta, tab_ingreso, tab_edicion = st.tabs(["🔍 Consulta", "➕ Ingreso", "✏️ Editar Stock"])
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#  TAB 1 — CONSULTA / BÚSQUEDA
+#  TAB 1 — CONSULTA
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 with tab_consulta:
     st.subheader("🔍 Buscar Producto")
 
     if total_productos == 0:
-        st.info("📭 El inventario está vacío. Agrega productos en la pestaña **➕ Ingreso**.")
+        st.info("📭 El inventario está vacío. Agrega productos en **➕ Ingreso**.")
     else:
-        # ── Buscador ──────────────────────────────
         busqueda = st.text_input(
-            "Escribe el nombre del producto",
-            placeholder="ej: labial rojo, tinte negro, base...",
-            key="buscador",
-            label_visibility="collapsed",
+            "Buscar", placeholder="ej: labial, tinte, base...",
+            key="buscador", label_visibility="collapsed",
         )
+        cats = ["Todas las categorías"] + sorted(df_inventario[COL_CAT].unique().tolist())
+        cat_filtro = st.selectbox("Categoría", cats, label_visibility="collapsed")
 
-        # ── Filtro por categoría ──────────────────
-        cats_disponibles = ["Todas las categorías"] + sorted(df_inventario["Categoría"].unique().tolist())
-        cat_filtro = st.selectbox("Filtrar por categoría", cats_disponibles, label_visibility="collapsed")
-
-        # ── Filtro de datos ───────────────────────
         df_vista = df_inventario.copy()
-
         if busqueda:
-            mask = df_vista["Producto"].str.lower().str.contains(busqueda.lower(), na=False)
-            df_vista = df_vista[mask]
-
+            df_vista = df_vista[df_vista[COL_NOMBRE].str.lower().str.contains(busqueda.lower(), na=False)]
         if cat_filtro != "Todas las categorías":
-            df_vista = df_vista[df_vista["Categoría"] == cat_filtro]
+            df_vista = df_vista[df_vista[COL_CAT] == cat_filtro]
 
-        # ── Mostrar resultados ────────────────────
         st.caption(f"Mostrando {len(df_vista)} de {total_productos} productos")
 
         if df_vista.empty:
-            st.warning("🔎 No se encontraron productos con ese filtro.")
+            st.warning("🔎 No se encontraron productos.")
         else:
-            # Tabla con formato
-            df_display = df_vista.copy()
-            df_display["Precio (Bs)"] = df_display["Precio (Bs)"].apply(lambda x: f"Bs {x:,.2f}")
-            df_display["Stock"] = df_display["Stock"].astype(str)
-
+            df_show = df_vista.copy()
+            df_show[COL_PRECIO]   = df_show[COL_PRECIO].apply(lambda x: f"Bs {x:,.2f}")
+            df_show[COL_CANTIDAD] = df_show[COL_CANTIDAD].astype(str)
             st.dataframe(
-                df_display[["Producto", "Categoría", "Stock", "Precio (Bs)"]],
+                df_show[[COL_ID, COL_NOMBRE, COL_CAT, COL_CANTIDAD, COL_PRECIO]],
                 use_container_width=True,
                 hide_index=True,
                 column_config={
-                    "Producto":    st.column_config.TextColumn("📦 Producto", width="large"),
-                    "Categoría":   st.column_config.TextColumn("🏷️ Categoría"),
-                    "Stock":       st.column_config.TextColumn("📊 Stock"),
-                    "Precio (Bs)": st.column_config.TextColumn("💰 Precio"),
-                }
+                    COL_ID:       st.column_config.TextColumn("🔖 id"),
+                    COL_NOMBRE:   st.column_config.TextColumn("📦 nombre", width="large"),
+                    COL_CAT:      st.column_config.TextColumn("🏷️ categoria"),
+                    COL_CANTIDAD: st.column_config.TextColumn("📊 cantidad"),
+                    COL_PRECIO:   st.column_config.TextColumn("💰 precio"),
+                },
             )
 
-        # ── Botón de recarga ──────────────────────
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔄 Actualizar datos", key="btn_refrescar"):
+        if st.button("🔄 Actualizar datos", key="btn_ref"):
             st.cache_resource.clear()
             st.rerun()
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#  TAB 2 — INGRESO DE NUEVO PRODUCTO
+#  TAB 2 — INGRESO
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 with tab_ingreso:
     st.subheader("➕ Agregar Producto")
 
     with st.form("form_ingreso", clear_on_submit=True):
-        nombre = st.text_input(
-            "Nombre del producto *",
-            placeholder="ej: Labial Rojo Intenso N°5",
-            max_chars=80,
-        )
+        nombre_inp = st.text_input("Nombre del producto *", placeholder="ej: Labial Rojo Intenso N°5", max_chars=80)
+        cat_inp    = st.selectbox("Categoría *", CATEGORIAS)
 
-        categoria = st.selectbox("Categoría *", CATEGORIAS)
-
-        col_stock, col_precio = st.columns(2)
-        with col_stock:
-            stock_nuevo = st.number_input(
-                "Stock inicial (unidades) *",
-                min_value=0,
-                max_value=9999,
-                value=1,
-                step=1,
-            )
-        with col_precio:
-            precio_nuevo = st.number_input(
-                "Precio (Bs) *",
-                min_value=0.0,
-                max_value=99999.0,
-                value=0.0,
-                step=0.5,
-                format="%.2f",
-            )
+        cc, cp = st.columns(2)
+        with cc:
+            cant_inp = st.number_input("Cantidad inicial *", min_value=0, max_value=9999, value=1, step=1)
+        with cp:
+            precio_inp = st.number_input("Precio (Bs) *", min_value=0.0, max_value=99999.0, value=0.0, step=0.5, format="%.2f")
 
         submitted = st.form_submit_button("💾 GUARDAR PRODUCTO", use_container_width=True)
 
     if submitted:
-        # Validaciones
-        nombre = nombre.strip()
-        if not nombre:
-            st.markdown('<div class="alerta-err">⚠️ El nombre del producto es obligatorio.</div>', unsafe_allow_html=True)
-        elif precio_nuevo <= 0:
-            st.markdown('<div class="alerta-err">⚠️ Ingresa un precio mayor a 0.</div>', unsafe_allow_html=True)
-        elif nombre.lower() in df_inventario["Producto"].str.lower().tolist():
-            st.markdown(f'<div class="alerta-err">⚠️ Ya existe un producto llamado <b>{nombre}</b>. Usa la pestaña de Edición para modificar su stock.</div>', unsafe_allow_html=True)
+        nombre_clean = nombre_inp.strip()
+        if not nombre_clean:
+            st.markdown('<div class="alerta-err">⚠️ El nombre es obligatorio.</div>', unsafe_allow_html=True)
+        elif precio_inp <= 0:
+            st.markdown('<div class="alerta-err">⚠️ El precio debe ser mayor a 0.</div>', unsafe_allow_html=True)
+        elif nombre_clean.lower() in df_inventario[COL_NOMBRE].str.lower().tolist():
+            st.markdown(f'<div class="alerta-err">⚠️ Ya existe "<b>{nombre_clean}</b>". Edita su stock en ✏️ Editar Stock.</div>', unsafe_allow_html=True)
         else:
-            # Crear fila nueva
-            nueva_fila = pd.DataFrame([{
-                "Producto":              nombre,
-                "Categoría":             categoria,
-                "Stock":                 int(stock_nuevo),
-                "Precio (Bs)":           float(precio_nuevo),
-                "Última Actualización":  datetime.now().strftime("%d/%m/%Y %H:%M"),
+            nid = generar_id(df_inventario)
+            nueva = pd.DataFrame([{
+                COL_ID:       nid,
+                COL_NOMBRE:   nombre_clean,
+                COL_CAT:      cat_inp,
+                COL_CANTIDAD: int(cant_inp),
+                COL_PRECIO:   float(precio_inp),
+                COL_FECHA:    datetime.now().strftime("%d/%m/%Y %H:%M"),
             }])
-
-            df_actualizado = pd.concat([df_inventario, nueva_fila], ignore_index=True)
-
+            df_upd = pd.concat([df_inventario, nueva], ignore_index=True)
             with st.spinner("Guardando en Google Sheets..."):
-                ok = guardar_datos(conn, df_actualizado)
-
+                ok = guardar_datos(conn, df_upd)
             if ok:
-                st.markdown(f'<div class="alerta-ok">✅ <b>{nombre}</b> agregado exitosamente con {stock_nuevo} unidades.</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="alerta-ok">✅ <b>{nombre_clean}</b> guardado con ID <b>{nid}</b> y {int(cant_inp)} unidades.</div>', unsafe_allow_html=True)
                 st.balloons()
-                # Recargar datos en la siguiente interacción
                 st.cache_resource.clear()
             else:
-                st.markdown('<div class="alerta-err">❌ No se pudo guardar. Verifica la conexión con Google Sheets.</div>', unsafe_allow_html=True)
+                st.markdown('<div class="alerta-err">❌ No se pudo guardar. Verifica la conexión.</div>', unsafe_allow_html=True)
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  TAB 3 — EDICIÓN DE STOCK
@@ -410,96 +310,82 @@ with tab_edicion:
     if total_productos == 0:
         st.info("📭 No hay productos. Agrega uno primero en **➕ Ingreso**.")
     else:
-        # ── Selector de producto ──────────────────
-        opciones = df_inventario["Producto"].tolist()
-        producto_sel = st.selectbox(
-            "Selecciona el producto",
-            opciones,
-            key="sel_producto",
-        )
+        opciones = df_inventario.apply(lambda r: f"{r[COL_ID]} — {r[COL_NOMBRE]}", axis=1).tolist()
+        sel      = st.selectbox("Selecciona el producto", opciones, key="sel_prod")
+        idx      = opciones.index(sel)
+        fila     = df_inventario.loc[idx]
+        stock_actual = int(fila[COL_CANTIDAD])
 
-        # Fila seleccionada
-        idx = df_inventario[df_inventario["Producto"] == producto_sel].index[0]
-        fila = df_inventario.loc[idx]
-        stock_actual = int(fila["Stock"])
-
-        # ── Info del producto seleccionado ────────
+        # Tarjeta info
         st.markdown(f"""
         <div style="background:white;border-radius:14px;padding:1rem 1.2rem;
                     box-shadow:0 2px 10px rgba(0,0,0,0.08);margin-bottom:1rem;">
-            <div style="font-size:1.05rem;font-weight:700;color:#2D1B2E;">{producto_sel}</div>
-            <div style="color:#6B5672;font-size:0.9rem;margin-top:3px;">{fila['Categoría']}</div>
-            <div style="margin-top:0.7rem;display:flex;gap:1rem;align-items:center;">
+            <div style="font-size:0.78rem;color:#B0A0BA;font-weight:600;">{fila[COL_ID]}</div>
+            <div style="font-size:1.05rem;font-weight:700;color:#2D1B2E;margin-top:2px;">{fila[COL_NOMBRE]}</div>
+            <div style="color:#6B5672;font-size:0.9rem;margin-top:3px;">{fila[COL_CAT]}</div>
+            <div style="margin-top:0.8rem;display:flex;gap:1rem;align-items:center;">
                 <span style="font-size:1.5rem;font-weight:900;color:#E91E8C;">{stock_actual}</span>
-                <span style="color:#6B5672;font-size:0.85rem;">unidades en stock</span>
+                <span style="color:#6B5672;font-size:0.85rem;">unidades · </span>
+                <span style="font-weight:700;color:#C8973A;">Bs {float(fila[COL_PRECIO]):,.2f}</span>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+        </div>""", unsafe_allow_html=True)
 
-        # ── Botones rápidos +1 / -1 ──────────────
+        # Botones rápidos
         st.markdown("**Ajuste rápido:**")
-        col_menos, col_mas = st.columns(2)
+        cm, cp2 = st.columns(2)
 
-        with col_menos:
-            if st.button("➖ Restar 1 unidad", key="btn_menos", disabled=(stock_actual <= 0)):
-                nuevo_stock = stock_actual - 1
-                df_inventario.at[idx, "Stock"] = nuevo_stock
-                df_inventario.at[idx, "Última Actualización"] = datetime.now().strftime("%d/%m/%Y %H:%M")
+        with cm:
+            if st.button("➖ Restar 1", key="btn_menos", disabled=(stock_actual <= 0)):
+                ns = stock_actual - 1
+                df_inventario.at[idx, COL_CANTIDAD] = ns
+                df_inventario.at[idx, COL_FECHA]    = datetime.now().strftime("%d/%m/%Y %H:%M")
                 with st.spinner("Guardando..."):
                     ok = guardar_datos(conn, df_inventario)
                 if ok:
-                    st.markdown(f'<div class="alerta-ok">✅ Stock actualizado a <b>{nuevo_stock}</b> unidades.</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="alerta-ok">✅ Nuevo stock: <b>{ns}</b> unidades.</div>', unsafe_allow_html=True)
                     st.rerun()
 
-        with col_mas:
-            if st.button("➕ Sumar 1 unidad", key="btn_mas"):
-                nuevo_stock = stock_actual + 1
-                df_inventario.at[idx, "Stock"] = nuevo_stock
-                df_inventario.at[idx, "Última Actualización"] = datetime.now().strftime("%d/%m/%Y %H:%M")
+        with cp2:
+            if st.button("➕ Sumar 1", key="btn_mas"):
+                ns = stock_actual + 1
+                df_inventario.at[idx, COL_CANTIDAD] = ns
+                df_inventario.at[idx, COL_FECHA]    = datetime.now().strftime("%d/%m/%Y %H:%M")
                 with st.spinner("Guardando..."):
                     ok = guardar_datos(conn, df_inventario)
                 if ok:
-                    st.markdown(f'<div class="alerta-ok">✅ Stock actualizado a <b>{nuevo_stock}</b> unidades.</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="alerta-ok">✅ Nuevo stock: <b>{ns}</b> unidades.</div>', unsafe_allow_html=True)
                     st.rerun()
 
-        # ── Ajuste manual (cantidad exacta) ──────
-        st.markdown("<hr class='separador'>", unsafe_allow_html=True)
-        st.markdown("**O ingresa la cantidad exacta:**")
+        # Ajuste exacto
+        st.markdown("<hr style='border:none;border-top:2px dashed #EDD9F0;margin:1.2rem 0;'>", unsafe_allow_html=True)
+        st.markdown("**O ajusta una cantidad específica:**")
 
         with st.form("form_stock"):
-            col_op, col_cant = st.columns([1, 1])
-            with col_op:
+            co, ca = st.columns(2)
+            with co:
                 operacion = st.selectbox("Operación", ["➕ Sumar", "➖ Restar", "🔄 Reemplazar"])
-            with col_cant:
+            with ca:
                 cantidad = st.number_input("Cantidad", min_value=1, max_value=9999, value=1, step=1)
 
-            nuevo_precio = st.number_input(
+            nuevo_precio_f = st.number_input(
                 "Actualizar precio (Bs) — opcional",
-                min_value=0.0,
-                value=float(fila["Precio (Bs)"]),
-                step=0.5,
-                format="%.2f",
+                min_value=0.0, value=float(fila[COL_PRECIO]), step=0.5, format="%.2f",
             )
-
             guardar = st.form_submit_button("💾 APLICAR CAMBIOS", use_container_width=True)
 
         if guardar:
-            if "Sumar" in operacion:
-                nuevo_stock = stock_actual + int(cantidad)
-            elif "Restar" in operacion:
-                nuevo_stock = max(0, stock_actual - int(cantidad))
-            else:  # Reemplazar
-                nuevo_stock = int(cantidad)
+            if "Sumar"      in operacion: ns = stock_actual + int(cantidad)
+            elif "Restar"   in operacion: ns = max(0, stock_actual - int(cantidad))
+            else:                          ns = int(cantidad)
 
-            df_inventario.at[idx, "Stock"] = nuevo_stock
-            df_inventario.at[idx, "Precio (Bs)"] = float(nuevo_precio)
-            df_inventario.at[idx, "Última Actualización"] = datetime.now().strftime("%d/%m/%Y %H:%M")
+            df_inventario.at[idx, COL_CANTIDAD] = ns
+            df_inventario.at[idx, COL_PRECIO]   = float(nuevo_precio_f)
+            df_inventario.at[idx, COL_FECHA]    = datetime.now().strftime("%d/%m/%Y %H:%M")
 
             with st.spinner("Guardando en Google Sheets..."):
                 ok = guardar_datos(conn, df_inventario)
-
             if ok:
-                st.markdown(f'<div class="alerta-ok">✅ <b>{producto_sel}</b> actualizado. Nuevo stock: <b>{nuevo_stock}</b> unidades.</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="alerta-ok">✅ <b>{fila[COL_NOMBRE]}</b> actualizado. Nuevo stock: <b>{ns}</b>.</div>', unsafe_allow_html=True)
                 st.rerun()
             else:
                 st.markdown('<div class="alerta-err">❌ Error al guardar. Intenta de nuevo.</div>', unsafe_allow_html=True)
@@ -510,7 +396,7 @@ with tab_edicion:
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("""
 <div style="text-align:center;color:#B0A0BA;font-size:0.78rem;padding:1rem 0;">
-    💄 Zimbawe Beauty · Inventario v1.0<br>
-    Desarrollado con Streamlit + Google Sheets
+    💄 Zimbawe Beauty · Inventario v1.1<br>
+    Hoja: <code>InventarioZimbawe</code> · Columnas: <code>id · nombre · categoria · cantidad · precio · fecha_actualizacion</code>
 </div>
 """, unsafe_allow_html=True)
